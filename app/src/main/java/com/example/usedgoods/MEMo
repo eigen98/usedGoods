@@ -66,7 +66,19 @@ FloatingActionButton 을 사용하기
             -> 어답터 생성
             -> glide를 사용하여 이미지 불러오기
 
-Firebase Realtime Database 를 활용하여 DB 구조 구상하기
+### Firebase Realtime Database 를 활용하여 DB 구조 구상하기
+    어떻게 db를 저장,구성을 하면 좋을지
+    Tinder 프로젝트를 그대로 스토리지만 추가하여 사용
+    firebase build.grald추가.
+
+    firebase에 사용할 라이브러리 추가
+        implementation 'com.google.firebase:firebase-database-ktx'
+        implementation 'com.google.firebase:firebase-auth-ktx'
+        implementation 'com.google.firebase:firebase-storage-ktx'
+    home프라그먼트에서 DB연결
+
+
+
 Firebase에서 상품 목록 가져와 보여주기
 Firebase Storage 를 이용하여 사진 업로드 추가하기
 마이페이지 구현하기

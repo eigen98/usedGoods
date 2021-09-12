@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "219901908033",
+    "firebase_url": "https://usedgoods-b16ce-default-rtdb.firebaseio.com",
+    "project_id": "usedgoods-b16ce",
+    "storage_bucket": "usedgoods-b16ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219901908033:android:59041b143b2153b93022c0",
+        "android_client_info": {
+          "package_name": "com.example.usedgoods"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219901908033-sblb6aosp2gd2bcti0289isrvprbeq1d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBL0M5QVIU-Kq6XQCYtwvxx0b6v0ueyfzg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219901908033-sblb6aosp2gd2bcti0289isrvprbeq1d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
