@@ -1,0 +1,78 @@
+이 챕터를 통해 배우는 것
+RecyclerView 사용하기
+View Binding 사용하기
+Fragment 사용하기
+BottomNavigationView 사용하기
+Firebase Storage 사용하기
+Firebase Realtime Database 사용하기
+Firebase Authentication 사용하기
+중고거래앱
+Firebase Authentication 기능을 사용하여 로그인 회원가입 기능을 구현할 수 있음.
+
+회원 기반으로 중고거래 아이템을 등록할 수 있음.
+
+아이템 등록 시 사진 업로드를 위해 Firebase Storage 를 사용할 수 있음.
+
+회원 기반으로 채팅 화면을 구현할 수 있음.
+
+Fragment 를 사용하여 하단 탭 화면 구조를 구현할 수 있음.
+
+FloatingActionButton 을 사용하기
+
+
+## 목차
+### 메인 페이지 Tab UI 구성하기
+    하단탭 구조를 구성 -> 그안에 들어가는 fragment를 구성
+        (ui중에 재사용이 가능한 부분을 잘라서 독립적인 수명주기를 가진 레이아웃., 자체입력 이벤트 추가,액티비티 위에서 존재)
+    ->네비게이션 역할을 해주는 하단 버튼
+        -> 레이아웃에 NavigationView 추가
+        -> Menu 레이아웃 추가 NavigationView에 Menu 추가하여 연결(item으로 관리)
+        -> 셀렉터를 활용하여 선택된 색상 다르게 설정()
+        -> 셀렉터를 NavigationView에 연결해줌
+    ->Fragment구현
+        ->메인액티비티에 세개의 프래그먼트를 만들게 되면 파일이 많아지므로 패키지 분리
+        -> 각각 클래스에 layout을 인수로 가지는 Fragment를 상속. 메인액티비티에 인스턴스 생성
+        -> 인스턴스를 attach함  //액티비티에는 SupportFragmentManager라는 것이 있다. -> Activity에 attach되어있는 프래그먼트 관리
+           ->supportFragmentManager.beginTransaction()//트랜잭션을 연다. (작업을 시작한다고 알려주는 기능->commit까지 작업진행)
+                         .apply {
+                             replace(R.id.fragmentContainer, fragment)
+                             commit()
+                         }
+
+
+### 상품 목록 페이지 UI 구성하기
+    프래그먼트의 생명주기
+        ->뷰가 생긴이후 초기화작업 => onViewCreated()
+        ->다시 진입하는 경우 => onResume()
+        ->나갈 경우 =>onStop(), onDestroyView()
+
+    뷰바인딩 사용
+        gralde에 추가 (kotlin option밑에)
+            viewBinding{
+                    enabled = true
+                }
+        프래그먼트에 바인딩 설정
+         private var binding : FragmentHomeBinding? = null
+
+            override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+                super.onViewCreated(view, savedInstanceState)
+
+                val fragmentHomeBinding = FragmentHomeBinding.bind(view)    //여기서만큼은 널이 아님
+                binding = fragmentHomeBinding
+        리스트어답터 연결하여 리사이클러뷰 연결(프라그먼트같은 경우 컨텍스트가 아님this->context)
+            ->//ListAdapter임포트 adroidx주의
+            fragmentHomeBinding.articleRecyclerView.layoutManager = LinearLayoutManager(context)
+            fragmentHomeBinding.articleRecyclerView.adapter = articleAdapter
+            -> 어답터 생성
+            -> glide를 사용하여 이미지 불러오기
+
+Firebase Realtime Database 를 활용하여 DB 구조 구상하기
+Firebase에서 상품 목록 가져와 보여주기
+Firebase Storage 를 이용하여 사진 업로드 추가하기
+마이페이지 구현하기
+채팅 리스트 구현하기
+채팅 페이지 구현하기
+어떤 것을 추가로 개발할 수 있을까?
+마무리
+
+
