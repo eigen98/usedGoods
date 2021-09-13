@@ -13,11 +13,13 @@ import com.example.usedgoods.databinding.ItemArticleBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ArticleAdapter : ListAdapter<ArticleModel, ArticleAdapter.ViewHolder>(diffUtil) { //ListAdapter임포트 adroidx주의
+class ArticleAdapter(val onItemClicked : (ArticleModel)-> Unit) : ListAdapter<ArticleModel, ArticleAdapter.ViewHolder>(diffUtil) { //ListAdapter임포트 adroidx주의
     inner class ViewHolder(private val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(articleModel: ArticleModel) {
             val format = SimpleDateFormat("MM월 dd일")
             val date = Date(articleModel.createdAt)
+
+
 
             binding.titleTextView.text = articleModel.title
             binding.dateTextView.text = format.format(date).toString()
@@ -27,7 +29,14 @@ class ArticleAdapter : ListAdapter<ArticleModel, ArticleAdapter.ViewHolder>(diff
             Glide.with(binding.thumbnailImageView)
                 .load(articleModel.imageUrl)
                 .into(binding.thumbnailImageView)
+
+            //컴포넌트 클릭 이벤트
+            binding.root.setOnClickListener{
+                onItemClicked(articleModel)
+            }
         }
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
