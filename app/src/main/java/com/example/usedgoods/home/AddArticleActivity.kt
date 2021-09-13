@@ -3,16 +3,13 @@ package com.example.usedgoods.home
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.LocusId
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.example.usedgoods.DBKey.Companion.DB_ARTICLES
 import com.example.usedgoods.R
 import com.google.firebase.auth.FirebaseAuth
@@ -66,17 +63,20 @@ class AddArticleActivity : AppCompatActivity() {
             val price =  findViewById<EditText>(R.id.priceEditText).text.toString()
             val sellerId = auth.currentUser?.uid.orEmpty()
 
+            showProgress()
+
             //중간에 이미지가 있으면 업로드 과정을 추가
 
             if(selectedUri != null){
                 val photoUri = selectedUri ?: return@setOnClickListener
                 uploadPhoto(photoUri,   //**비동기**
                     //이미지url을 가져와서 첨부하여 업로드
-                    successHndler = { url ->
+                    successHandler = { url ->
                         uploadArticle(sellerId,title,price,url)
                     },
                     errorHandler = {//실패시 업로드 X 토스트메시지
                         Toast.makeText(this,"사진 업로드에 실패했습니다",Toast.LENGTH_SHORT).show()
+                        hideProgress()
                     }
                 )
             }else { //**동기**
@@ -86,21 +86,21 @@ class AddArticleActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadPhoto(uri: Uri, successHndler: (String)-> Unit, errorHandler: ()-> Unit){
-        val fileName = "${System.currentTimeMillis()}.png"
+    private fun uploadPhoto(uri: Uri, successHandler: (String)-> Unit, errorHandler: ()-> Unit){
+        val fileName = "${System.currentTimeMillis()}.png"  //랜덤한 String을 올려도 됨
         storage.reference.child("article/photo").child(fileName)
             .putFile(uri)
             .addOnCompleteListener{
-                if(it.isSuccessful){
+                if(it.isSuccessful){    //업로드 완료시
                     storage.reference.child("article/photo").child(fileName)
                         .downloadUrl
-                        .addOnSuccessListener { uri ->
-                            successHndler(uri.toString())
+                        .addOnSuccessListener { uri ->  //downloadUrl을 실제로 잘 가지고 올 수 있었는지
+                            successHandler(uri.toString())
                         }.addOnFailureListener{
                             errorHandler()
                         }
 
-                } else{
+                } else{//업로드 완료 X
                     errorHandler()
                 }
             }
@@ -110,6 +110,8 @@ class AddArticleActivity : AppCompatActivity() {
         val model = ArticleModel(sellerId,title,System.currentTimeMillis(), "$price 원",imageUrl)
 
         articleDB.push().setValue(model)
+
+        hideProgress()
 
         finish()//아이템 등록
 
@@ -137,6 +139,14 @@ class AddArticleActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         startActivityForResult(intent, 2020)
+    }
+
+    private fun showProgress(){
+        findViewById<ProgressBar>(R.id.progressBar).isVisible = true
+    }
+
+    private fun hideProgress(){
+        findViewById<ProgressBar>(R.id.progressBar).isVisible = false
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
